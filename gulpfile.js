@@ -4,7 +4,7 @@ var babelify = require('babelify');
 var rename = require('gulp-rename');
 var source = require('vinyl-source-stream');
 
-gulp.task('scripts', function() {
+gulp.task('default', function() {
  var entryFile = './src/app.jsx';
 
 
@@ -22,5 +22,5 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['./jsx/**/*'], ['scripts']);
+  gulp.watch(['./jsx/**/*'], ['default']);
 });
