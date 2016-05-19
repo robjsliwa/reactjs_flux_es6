@@ -4,7 +4,7 @@ class App extends Component {
   constructor (props) {
     super(props);
   }
-  sd
+  
   render() {
     return (
       <div className='app-container'>
