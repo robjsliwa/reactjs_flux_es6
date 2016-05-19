@@ -4,6 +4,7 @@ var babelify = require('babelify');
 var rename = require('gulp-rename');
 var source = require('vinyl-source-stream');
 var notifier = require('node-notifier');
+var server = require('gulp-server-livereload');
 
 var notify = function(error) {
   var message = 'File: ';
@@ -24,7 +25,7 @@ var notify = function(error) {
   if(error.loc) {
     message += '\nLine: ' + error.loc.line + ' Column: ' + error.loc.column;
   }
-  
+
   console.log(error);
 
   notifier.notify({title: title, message: message});
@@ -47,6 +48,23 @@ gulp.task('default', function() {
     .pipe(gulp.dest('public/'));
 });
 
+gulp.task('serve', function(done) {
+  gulp.src('')
+    .pipe(server({
+      livereload: {
+        enable: true,
+        filter: function(filePath, cb) {
+          if(/index.js/.test(filePath)) {
+            cb(true)
+          } else if(/style.css/.test(filePath)){
+            cb(true)
+          }
+        }
+      },
+      open: true
+    }));
+});
+
 gulp.task('watch', function() {
-  gulp.watch(['./src/**/*'], ['default']);
+  gulp.watch(['./src/**/*'], ['default', 'serve']);
 });
