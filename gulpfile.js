@@ -5,6 +5,7 @@ var rename = require('gulp-rename');
 var source = require('vinyl-source-stream');
 var notifier = require('node-notifier');
 var server = require('gulp-server-livereload');
+var watchify = require('watchify');
 
 var notify = function(error) {
   var message = 'File: ';
@@ -35,7 +36,7 @@ gulp.task('default', function() {
  var entryFile = './src/app.jsx';
 
 
-  var bundler = browserify(entryFile, {extensions: [ ".js", ".jsx" ]});
+  var bundler = watchify(browserify(entryFile, {extensions: [ ".js", ".jsx" ]}));
 
   bundler.transform(babelify);
 
