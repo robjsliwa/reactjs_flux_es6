@@ -6,13 +6,14 @@ var source = require('vinyl-source-stream');
 var notifier = require('node-notifier');
 
 var notify = function(error) {
-  var message = 'In: ';
+  var message = 'File: ';
   var title = 'Error: ';
 
   if(error.description) {
     title += error.description;
   } else if (error.message) {
-    title += error.message;
+    var msg = error.message.substring(error.message.indexOf(':') + 1).substring(0, 40);
+    title += msg;
   }
 
   if(error.filename) {
@@ -20,9 +21,11 @@ var notify = function(error) {
     message += file[file.length-1];
   }
 
-  if(error.lineNumber) {
-    message += '\nLine: ' + error.lineNumber;
+  if(error.loc) {
+    message += '\nLine: ' + error.loc.line + ' Column: ' + error.loc.column;
   }
+  
+  console.log(error);
 
   notifier.notify({title: title, message: message});
 };
