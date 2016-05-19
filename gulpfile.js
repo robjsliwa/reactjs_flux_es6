@@ -45,5 +45,5 @@ gulp.task('default', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['./jsx/**/*'], ['default']);
+  gulp.watch(['./src/**/*'], ['default']);
 });
