@@ -6,6 +6,8 @@ var source = require('vinyl-source-stream');
 var notifier = require('node-notifier');
 var server = require('gulp-server-livereload');
 var watchify = require('watchify');
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
 
 var notify = function(error) {
   var message = 'File: ';
@@ -32,7 +34,7 @@ var notify = function(error) {
   notifier.notify({title: title, message: message});
 };
 
-gulp.task('default', function() {
+gulp.task('build', function() {
  var entryFile = './src/app.jsx';
 
 
@@ -66,6 +68,15 @@ gulp.task('serve', function(done) {
     }));
 });
 
-gulp.task('watch', function() {
-  gulp.watch(['./src/**/*'], ['default', 'serve']);
+gulp.task('sass', function () {
+  gulp.src('./sass/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(concat('style.css'))
+    .pipe(gulp.dest('./'));
 });
+
+gulp.task('watch', function() {
+  gulp.watch('./sass/**/*.scss', ['sass']);
+});
+
+gulp.task('default', ['build', 'serve', 'sass', 'watch']);
