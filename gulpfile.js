@@ -35,20 +35,26 @@ var notify = function(error) {
 };
 
 gulp.task('build', function() {
- var entryFile = './src/app.jsx';
-
-
+  var entryFile = './src/app.jsx';
   var bundler = watchify(browserify(entryFile, {extensions: [ ".js", ".jsx" ]}));
 
   bundler.transform(babelify);
 
-  var stream = bundler.bundle();
-  stream.on('error', notify);
+  function rebundle() {
+    var stream = bundler.bundle();
+    stream.on('error', notify);
 
-  stream
-    .pipe(source(entryFile))
-    .pipe(rename('index.js'))
-    .pipe(gulp.dest('public/'));
+    stream
+      .pipe(source(entryFile))
+      .pipe(rename('index.js'))
+      .pipe(gulp.dest('public/'));
+  }
+
+  bundler.on('update', function() {
+    rebundle();
+  })
+
+  return rebundle();
 });
 
 gulp.task('serve', function(done) {
